@@ -1,0 +1,18 @@
+services:
+  firefox:
+    image: lscr.io/linuxserver/firefox:latest
+    container_name: firefox
+    environment:
+      - PUID=${PUID:-1003}
+      - PGID=${PGID:-1003}
+      - TZ=${TZ:-America/Toronto}
+      - CUSTOM_USER=${CUSTOM_USER:-admin}
+      - PASSWORD=${PASSWORD:?Set PASSWORD in .env}
+    volumes:
+      - ${CONFIG_DIR:-/opt/firefox-browser/config}:/config
+      - ${UPLOAD_TEMP_DIR:-/opt/radware/storage/uploads/temp}:/config/Downloads/upload-temp
+      - ${MAINTENANCE_DOWNLOAD_DIR:-/opt/radware/storage/maintenance/browser-downloads}:/config/Downloads/maintenance
+    ports:
+      - "${HOST_PORT:-3010}:3001"
+    shm_size: "1gb"
+    restart: unless-stopped
